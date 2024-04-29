@@ -1,0 +1,15 @@
+output "basis_vpc_arn" {
+    value = aws_vpc.main.arn
+}
+
+output "basis_vpc_id" {
+    value = aws_vpc.main.id
+}
+
+output "basis_vpc_main_route_table_id" {
+    value = aws_vpc.main.main_route_table_id
+}
+
+output "basis_vpc_ipv6_association_id" {
+    value = aws_vpc.main.ipv6_association_id
+}

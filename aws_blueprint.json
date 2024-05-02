@@ -1,0 +1,64 @@
+{
+    "vpcs": {
+        "eu-west-2": {
+            "cidr": "10.0.0.0/11",
+            "description": "Base VPC",
+            "subnets": [
+                {
+                    "cidr": "10.0.0.0/26",
+                    "description": "Private subnet 1 AZ eu-west-2a",
+                    "availability_zone": "eu-west-2a",
+                    "ipam_id": "387"
+                },
+                {
+                    "cidr": "10.0.0.64/26",
+                    "description": "Public subnet 1 AZ eu-west-2a",
+                    "availability_zone": "eu-west-2a",
+                    "ipam_id": "388"
+                },
+                {
+                    "cidr": "10.0.0.128/26",
+                    "description": "Private subnet 2 AZ eu-west-2b",
+                    "availability_zone": "eu-west-2b",
+                    "ipam_id": "389"
+                },
+                {
+                    "cidr": "10.0.0.192/26",
+                    "description": "Public subnet 2 AZ eu-west-2b",
+                    "availability_zone": "eu-west-2b",
+                    "ipam_id": "390"
+                }
+            ]
+        },
+        "us-east-2": {
+            "cidr": "10.32.0.0/11",
+            "description": "Base VPC",
+            "subnets": [
+                {
+                    "cidr": "10.32.0.0/26",
+                    "description": "Private subnet 1 AZ us-east-2a",
+                    "availability_zone": "us-east-2a",
+                    "ipam_id": "391"
+                },
+                {
+                    "cidr": "10.32.0.64/26",
+                    "description": "Public subnet 1 AZ us-east-2a",
+                    "availability_zone": "us-east-2a",
+                    "ipam_id": "392"
+                },
+                {
+                    "cidr": "10.32.0.128/26",
+                    "description": "Private subnet 2 AZ us-east-2b",
+                    "availability_zone": "us-east-2b",
+                    "ipam_id": "393"
+                },
+                {
+                    "cidr": "10.32.0.192/26",
+                    "description": "Public subnet 2 AZ us-east-2b",
+                    "availability_zone": "us-east-2b",
+                    "ipam_id": "394"
+                }
+            ]
+        }
+    }
+}

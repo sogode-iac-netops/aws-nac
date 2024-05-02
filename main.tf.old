@@ -1,0 +1,124 @@
+locals {
+  # Read env.json as produced by prereqs
+  env_data = jsondecode(file("${path.cwd}/env.json"))
+
+  # get ipam info
+  ipam_base = local.env_data.ipam_base
+  ipam_token = local.env_data.ipam_token
+  supernets = local.env_data.supernets
+}
+
+data "terracurl_request" "vpc1_supernet" {
+    name = "VPC 1 supernet"
+    url = "${local.ipam_base}subnets/${local.supernets.0.id}/first_subnet/24"
+    method = "POST"
+    headers = {
+      token = "${local.ipam_token}"
+      Accept = "application/json"
+      Content-Type = "application/json"
+    }
+    request_body = <<EOF
+{
+  "description": "Region 1 Basis 1"
+}
+EOF
+    response_codes = [ 201 ]
+    skip_tls_verify = true
+}
+
+output "vpc1_supernet" {
+  value = terracurl_request.vpc1_supernet.response
+}
+
+data "terracurl_request" "vpc1_sn_az1_private" {
+    name = "VPC 1 AZ 1 private subnet"
+    url = "${local.ipam_base}subnets/${terracurl_request.vpc1_supernet.response.id}/first_subnet/26"
+    method = "POST"
+    headers = {
+      token = "${local.ipam_token}"
+      Accept = "application/json"
+      Content-Type = "application/json"
+    }
+    request_body = <<EOF
+{
+  "description": "Region 1 Basis 1 AZ 1 private subnet"
+}
+EOF
+    response_codes = [ 201 ]
+    skip_tls_verify = true
+}
+
+output "vpc1_sn_az1_private" {
+  value = terracurl_request.vpc1_sn_az1_private
+}
+
+data "terracurl_request" "vpc1_sn_az2_private" {
+    name = "VPC 1 AZ 2 private subnet"
+    url = "${local.ipam_base}subnets/${terracurl_request.vpc1_supernet.response.id}/first_subnet/26"
+    method = "POST"
+    headers = {
+      token = "${local.ipam_token}"
+      Accept = "application/json"
+      Content-Type = "application/json"
+    }
+    request_body = <<EOF
+{
+  "description": "Region 1 Basis 1 AZ 2 private subnet"
+}
+EOF
+    response_codes = [ 201 ]
+    skip_tls_verify = true
+}
+
+output "vpc1_sn_az2_private" {
+  value = terracurl_request.vpc1_sn_az2_private
+}
+
+data "terracurl_request" "vpc1_sn_az1_public" {
+    name = "VPC 1 AZ 1 public subnet"
+    url = "${local.ipam_base}subnets/${terracurl_request.vpc1_supernet.response.id}/first_subnet/26"
+    method = "POST"
+    headers = {
+      token = "${local.ipam_token}"
+      Accept = "application/json"
+      Content-Type = "application/json"
+    }
+    request_body = <<EOF
+{
+  "description": "Region 1 Basis 1 AZ 1 public subnet"
+}
+EOF
+    response_codes = [ 201 ]
+    skip_tls_verify = true
+}
+
+output "vpc1_sn_az1_public" {
+  value = terracurl_request.vpc1_sn_az1_public
+}
+
+data "terracurl_request" "vpc1_sn_az2_public" {
+    name = "VPC 1 AZ 2 public subnet"
+    url = "${local.ipam_base}subnets/${terracurl_request.vpc1_supernet.response.id}/first_subnet/26"
+    method = "POST"
+    headers = {
+      token = "${local.ipam_token}"
+      Accept = "application/json"
+      Content-Type = "application/json"
+    }
+    request_body = <<EOF
+{
+  "description": "Region 1 Basis 1 AZ 2 public subnet"
+}
+EOF
+    response_codes = [ 201 ]
+    skip_tls_verify = true
+}
+
+output "vpc1_sn_az2_public" {
+  value = terracurl_request.vpc1_sn_az2_public
+}
+
+module "basis" "basis1" {
+  source = "./basis"
+  region = ""
+}

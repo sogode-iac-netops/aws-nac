@@ -8,14 +8,17 @@ locals {
   supernets = local.env_data.supernets
 }
 
-data "http" "cidr" {
-    url = "${local.ipam_base}subnets/${local.supernets.0.id}/first_subnet/24"
-    request_headers = {
-      token = "${local.ipam_token}"
-    }
-    insecure = true
-}
-
-output "supernet" {
-    value = "${data.http.cidr}"
-}
+#resource "aws_vpc" "vpc_basis" {
+#  cidr_block = "${terracurl_request.supernet.json.data}"
+#  assign_generated_ipv6_cidr_block = true
+#
+#  tags = {
+#    Name = "Basis VPC"
+#    Owner = "NetOps"
+#  }
+#  lifecycle {
+#    # Ignore any changes to the tags made outside of Terraform
+#    ignore_changes = [ tags ]
+#  }
+#}
+#

@@ -33,5 +33,16 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Local environment file
+# Local environment files
 env.json
+ipam.vars
+phpipam.json
+
+# Credentials files
+credentials.*
+
+# Runtime files
+blueprint.json
+
+# Python venv
+.venv

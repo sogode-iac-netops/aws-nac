@@ -1,0 +1,11 @@
+variable region {
+    type = string
+    description = "Region where this instance is deployed"
+    default = "us-west-2"
+}
+
+variable "aws_basis" {
+  type = object({
+    region = string
+  })
+}

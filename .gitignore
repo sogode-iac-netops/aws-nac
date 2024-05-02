@@ -42,7 +42,7 @@ phpipam.json
 credentials.*
 
 # Runtime files
-blueprint.json
+aws-base-blueprint.json
 
 # Python venv
 .venv

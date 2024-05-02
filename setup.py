@@ -12,7 +12,7 @@ first_supernet_cidr = "10.0.0.0/11"
 amount_of_regions = 2
 subnet_prefix = 26 # Length of subnets in VPC
 phpipam_credentials_file = 'phpipam.json'
-outfile_name = 'blueprint.json'
+outfile_name = 'aws-base-blueprint.json'
 
 output = {'vpcs': {}}
 sesh = Session()

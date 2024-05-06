@@ -10,7 +10,7 @@ import ipaddress
 # Defaults
 regions_network_start = "10.0.0.0"
 region_prefix_len = 11
-output_file_name = 'base-networks.json'
+output_file_name = 'base_networks.json'
 
 phpipam_credentials_file = 'phpipam.json'
 sesh = Session()
@@ -226,13 +226,13 @@ def main():
     if not supernetId == False:
         vpc_cidr = create_ipam_vpc_cidr(supernetId, region_name)
         subnets = create_subnets(vpc_cidr['ipam_id'], availability_zones)
-        output = {'region': {
+        output = {
             'region_name': region_name,
             'vpc_cidr': vpc_cidr['cidr'],
             'vpc_description': vpc_cidr['description'],
             'availability_zones': availability_zones,
             'subnets': subnets
-        }}
+        }
     
         with open(output_file_name, 'w') as f:
             json.dump(output, f)

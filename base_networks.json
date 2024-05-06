@@ -1,0 +1,39 @@
+{
+    "region_name": "eu-west-1",
+    "vpc_cidr": "10.0.2.0/24",
+    "vpc_description": "Base VPC eu-west-1",
+    "availability_zones": [
+      "eu-west-1a",
+      "eu-west-1b"
+    ],
+    "subnets": [
+      {
+        "cidr": "10.0.2.0/26",
+        "description": "Private subnet 1 AZ eu-west-1a",
+        "availability_zone": "eu-west-1a",
+        "ipam_id": "454",
+        "scope": "private"
+      },
+      {
+        "cidr": "10.0.2.64/26",
+        "description": "Public subnet 1 AZ eu-west-1a",
+        "availability_zone": "eu-west-1a",
+        "ipam_id": "455",
+        "scope": "public"
+      },
+      {
+        "cidr": "10.0.2.128/26",
+        "description": "Private subnet 2 AZ eu-west-1b",
+        "availability_zone": "eu-west-1b",
+        "ipam_id": "456",
+        "scope": "private"
+      },
+      {
+        "cidr": "10.0.2.192/26",
+        "description": "Public subnet 2 AZ eu-west-1b",
+        "availability_zone": "eu-west-1b",
+        "ipam_id": "457",
+        "scope": "public"
+      }
+    ]
+  }

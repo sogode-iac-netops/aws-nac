@@ -2,23 +2,29 @@ locals {
   # Read env.json as produced by prereqs
   env_data = jsondecode(file("${path.cwd}/env.json"))
 
-  # get ipam info
-  ipam_base = local.env_data.ipam_base
-  ipam_token = local.env_data.ipam_token
-  supernets = local.env_data.supernets
+  # Read aws_blueprint.json as output by setup
+  blueprint = jsondecode((file("${path.cwd}/aws_blueprint.json")))
+
+  region0 = local.blueprint.regions[0].name
+  region1 = local.blueprint.regions[1].name
 }
 
-#resource "aws_vpc" "vpc_basis" {
-#  cidr_block = "${terracurl_request.supernet.json.data}"
-#  assign_generated_ipv6_cidr_block = true
-#
-#  tags = {
-#    Name = "Basis VPC"
-#    Owner = "NetOps"
-#  }
-#  lifecycle {
-#    # Ignore any changes to the tags made outside of Terraform
-#    ignore_changes = [ tags ]
-#  }
-#}
-#
+resource "aws_vpc" "base0" {
+  provider = aws.region0
+
+#  cidr_block = local.blueprint.vpcs[region].cidr
+  cidr_block = "10.0.0.0/24"
+
+  tags = {
+    Name = local.blueprint.vpcs[local.region0].description
+  }
+
+}
+
+resource "aws_vpc" "base1" {
+  provider = aws.us-west-2
+
+  #cidr_block = local.blueprint.vpcs[region].cidr
+  cidr_block = "10.0.0.0/24"
+
+}

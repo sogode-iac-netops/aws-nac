@@ -8,13 +8,17 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import ipaddress
 
 # Assumptions
-first_supernet_cidr = "10.0.0.0/11"
+first_region_cidr = "10.0.0.0/11"
 amount_of_regions = 2
+base_vpc_cidr_length = 24 # Prefix length of the Base VPC cider_block
 subnet_prefix = 26 # Length of subnets in VPC
 phpipam_credentials_file = 'phpipam.json'
 outfile_name = 'aws-base-blueprint.json'
 
-output = {'vpcs': {}}
+output = {
+    'regions': [],
+    'vpcs': {}
+}
 sesh = Session()
 
 def merge_dictionaries(dict1, dict2):
@@ -44,7 +48,9 @@ def select_regions():
         show_multi_select_hint = True
         )
     menu_entry_indices = terminal_menu.show()
-    return terminal_menu.chosen_menu_entries[:amount_of_regions]
+    regions = terminal_menu.chosen_menu_entries[:amount_of_regions]
+    output['regions'].append(regions)
+    return regions
 
 def get_aws_region_names():
     # Retrieve all regions
@@ -73,6 +79,13 @@ def get_aws_availability_zones(regions):
         del boto
     return zones
     
+def del_ipam_section(sectionId):
+    controller = "sections/"
+    with open('sectionId', 'r') as f:
+        sesh.delete(globals()['phpipam_base'] + controller, + f.read())
+        #sectionId = f.read()
+    #req = sesh.delete(globals()['phpipam_base'] + controller, + sectionId)
+
 def create_ipam_section():
     # Create a section in phpipam to store subnets in
     controller = "sections/"
@@ -83,11 +96,17 @@ def create_ipam_section():
     }
     req = sesh.post(globals()['phpipam_base'] + controller, data=json.dumps(data))
     if req.status_code == 201:
+        with open('sectionId', 'w') as f:
+            f.write(req.json()['id'])
         return req.json()['id']
     else:
         return False
 
-def calculate_subnet_cidrs(amount):
+def calculate_next_subnet(subnet):
+    current_broadcast = ipaddress.IPv4Address(ipaddress.IPv4Network.broadcast_address)
+
+
+def calculate_subnet_cidrs(supernet, amount, prefix):
     # This calculates the supernets from the first_supernet variable
     cidrs = [first_supernet_cidr]
     i = 1
@@ -98,6 +117,10 @@ def calculate_subnet_cidrs(amount):
         i += 1
     
     return cidrs
+
+def create_supernets(sectionId, regions):
+    for region in amount_of_regions:
+        cidrs = calculate_subnet_cidrs(amount_of_regions)
 
 def create_supernets(sectionId, regions):
     # Reserve supernets for each of the regions
@@ -188,6 +211,7 @@ if __name__ == "__main__":
     with open (phpipam_credentials_file) as f:
         j = json.load(f)
     globals().update(j)
+
 
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     sesh.headers.update({'token': globals()['phpipam_token']})

@@ -211,7 +211,8 @@ def create_subnets(supernetId, availability_zones):
                     'cidr': req.json()['data'],
                     'description': data['description'],
                     'availability_zone': availability_zones[az],
-                    'ipam_id': req.json()['id']
+                    'ipam_id': req.json()['id'],
+                    'scope': scopes[s].lower()
                 }
                 subnets.append(subnet)
             s += 1

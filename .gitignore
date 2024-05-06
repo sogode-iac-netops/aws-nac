@@ -43,6 +43,7 @@ credentials.*
 
 # Runtime files
 aws-base-blueprint.json
+base-networks.json
 
 # Python venv
 .venv

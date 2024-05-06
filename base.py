@@ -171,6 +171,24 @@ def create_supernet(sectionId, regionName, cidr):
         print(f"ERROR: {req.json()['message']}\n")
         return False
 
+def create_ipam_vpc_cidr(supernetId, region_name):
+    controller = "subnets/"
+    cidr_prefix_len = 24
+    endpoint = f"{supernetId}/first_subnet/{str(cidr_prefix_len)}/"
+    data = {
+        "description": f"Base VPC {region_name}"
+    }
+    req = sesh.post(globals()['phpipam_base'] + controller + endpoint, data=json.dumps(data))
+    if req.status_code == 201:
+        subnet = {
+            'cidr': req.json()['data'],
+            'description': data['description'],
+            'ipam_id': req.json()['id']
+        }
+    else:
+        subnet = False
+    return subnet
+
 def create_subnets(supernetId, availability_zones):
     controller = "subnets/"
     scopes = ["Private", "Public"]
@@ -206,9 +224,12 @@ def main():
     availability_zones = get_aws_az_names(region_name)
     supernetId = get_supernet(sectionId, region_name)
     if not supernetId == False:
-        subnets = create_subnets(supernetId, availability_zones)
+        vpc_cidr = create_ipam_vpc_cidr(supernetId, region_name)
+        subnets = create_subnets(vpc_cidr['ipam_id'], availability_zones)
         output = {'region': {
             'region_name': region_name,
+            'vpc_cidr': vpc_cidr['cidr'],
+            'vpc_description': vpc_cidr['description'],
             'availability_zones': availability_zones,
             'subnets': subnets
         }}

@@ -33,24 +33,14 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Ignore terraform.lock files here
-**/.terraform.lock.hcl
-
 # Any temporary local backups
 *.old
 
 # Local environment files
-env.json
-ipam.vars
 phpipam.json
 
 # Credentials files
 credentials.*
-
-# Runtime files
-aws_blueprint.json
-aws-base-blueprint.json
-base-networks.json
 
 # Python venv
 .venv

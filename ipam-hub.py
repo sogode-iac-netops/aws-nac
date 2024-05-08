@@ -5,13 +5,10 @@ from simple_term_menu import TerminalMenu
 import requests
 from requests import Request, Session
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-import ipaddress
 
 # Defaults
 regions_network_start = "10.0.0.0"
 region_prefix_len = 11
-output_file_name = 'base_networks.json'
-
 phpipam_credentials_file = 'phpipam.json'
 sesh = Session()
 
@@ -39,10 +36,6 @@ def get_section_id():
     else:
         return sections[0]['id']
     
-def del_ipam_section(sectionId):
-    controller = "sections/"
-    req = sesh.delete(globals()['phpipam_base'] + controller, + sectionId)
-
 def create_ipam_section():
     # Create a section in phpipam to store subnets in
     controller = "sections/"
@@ -126,7 +119,7 @@ def get_supernet(sectionId, regionName):
             # 'default' selected by simply hitting enter
             # so no real input was received
             supernet = default_cidr
-        return create_supernet(sectionId, regionName, supernet)
+        return [create_supernet(sectionId, regionName, supernet), supernet]
     else:
         # Pick any of the existing ones, or create new
         options = ['New']
@@ -144,14 +137,14 @@ def get_supernet(sectionId, regionName):
                 # 'default' selected by simply hitting enter
                 # so no real input was received
                 supernet = default_cidr
-            return create_supernet(sectionId, regionName, supernet)
+            return [create_supernet(sectionId, regionName, supernet), supernet]
         else:
             # Find subnet
             subnet = options[menu_entry_index].split('/')[0]
             mask = options[menu_entry_index].split('/')[1]
             for supernet in supernets:
                 if supernet['subnet'] == subnet and supernet['mask'] == mask:
-                    return supernet['id']
+                    return [supernet['id'], options[menu_entry_index]]
 
 def create_supernet(sectionId, regionName, cidr):
     # Create a supernet in a section
@@ -161,7 +154,7 @@ def create_supernet(sectionId, regionName, cidr):
     data = {
         "subnet": cidr.split('/')[0],
         "mask": cidr.split('/')[1],
-        "description": f"Region {regionName}",
+        "description": regionName,
         "sectionId": sectionId
     }
     req = sesh.post(globals()['phpipam_base'] + controller, data=json.dumps(data))
@@ -191,17 +184,17 @@ def create_ipam_vpc_cidr(supernetId, region_name):
 
 def create_subnets(supernetId, availability_zones):
     controller = "subnets/"
-    scopes = ["Private", "Public"]
-    subnet_prefix_len = 26
+    scopes = ["Private", "Public", "TransitGateway"]
+    scopes_prefix_len = [26, 27, 28]
     subnets = []
 
-    # Iterate through 2 availability zones
-    az = 0
-    endpoint = f"{supernetId}/first_subnet/{str(subnet_prefix_len)}/"
-    while az < 2:
-        # Create different scopes of networks
-        s = 0
-        while s < len(scopes):
+    # Create different scopes of networks
+    s = 0
+    while s < len(scopes):
+        # Iterate through 2 availability zones
+        az = 0
+        while az < 2:
+            endpoint = f"{supernetId}/first_subnet/{str(scopes_prefix_len[s])}/"
             data = {
                 "description": f"{scopes[s]} subnet {az + 1} AZ {availability_zones[az]}"
             }
@@ -215,27 +208,28 @@ def create_subnets(supernetId, availability_zones):
                     'scope': scopes[s].lower()
                 }
                 subnets.append(subnet)
-            s += 1
-        az += 1
+            az += 1
+        s += 1
     return subnets
 
 def main():
     sectionId = get_section_id()
     region_name = get_aws_region_name()
     availability_zones = get_aws_az_names(region_name)
-    supernetId = get_supernet(sectionId, region_name)
+    [supernetId, region_cidr] = get_supernet(sectionId, region_name)
     if not supernetId == False:
         vpc_cidr = create_ipam_vpc_cidr(supernetId, region_name)
         subnets = create_subnets(vpc_cidr['ipam_id'], availability_zones)
         output = {
             'region_name': region_name,
+            'region_cidr': region_cidr,
             'vpc_cidr': vpc_cidr['cidr'],
             'vpc_description': vpc_cidr['description'],
             'availability_zones': availability_zones,
             'subnets': subnets
         }
     
-        with open(output_file_name, 'w') as f:
+        with open(f"ipam_hub_{region_name}.json", 'w') as f:
             json.dump(output, f)
         print(f"{json.dumps(output)}\n")
 

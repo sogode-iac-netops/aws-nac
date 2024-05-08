@@ -7,10 +7,10 @@ variable "cidr_block" {
 variable "vpc_name" {
   type        = string
   description = "Name tag value for the VPC"
-  default     = "Base VPC"
+  default     = "Spoke VPC"
 }
 
-variable "subnet_config" {
+variable "subnets" {
   type = map(object({
     cidr              = string
     description       = string
@@ -19,4 +19,22 @@ variable "subnet_config" {
     scope             = string
   }))
   description = "Map of subnets"
+}
+
+variable "tgw_id" {
+  type        = string
+  description = "Transit Gateway ID to connect to"
+  default     = ""
+}
+
+variable "tgw_rt_id" {
+  type        = string
+  description = "Transit Gateway route table to propagate route to"
+  default     = ""
+}
+
+variable "app_name" {
+  type        = string
+  description = "Application name for the spoke"
+  default     = ""
 }

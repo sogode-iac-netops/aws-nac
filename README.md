@@ -49,6 +49,7 @@ This deployment is meant to run on a Linux CLI environment with the following so
 - [AWS CLI v2](https://github.com/aws/aws-cli/tree/v2)
 - [Python 3](https://www.python.org/downloads/)
 - [Terraform](https://developer.hashicorp.com/terraform/install)
+- [My phpipam-docker](https://github.com/peetvandesande/phpipam-docker) (Optional)
 
 ## Further explanation
 Everything stars with the AWS CLI being installed and configured.  
@@ -57,7 +58,7 @@ Including credentials and default region.
 
 In Terraform, AWS regions are mentioned specifically using provider aliases.
 
-The Python scripts `ipam-hub.py` and `ipam-spoke.py` are used to interface with an instance of phpIPAM (link to repository will follow) and create a JSON file with network information.  
+The Python scripts `ipam-hub.py` and `ipam-spoke.py` are used to interface with an instance of phpIPAM [link to my repository for a fully working version](https://github.com/peetvandesande/phpipam-docker) and create a JSON file with network information.  
 
 The 'hub' file will produce output for a regional hub, the 'spoke' file produces output for a spoke that must connect to a hub.
 

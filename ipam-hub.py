@@ -26,15 +26,19 @@ def get_section_id():
     if not sections:
         # No existing sections
         return create_ipam_section()
-    elif len(sections) > 1:
+    else:
+        options = ['New']
+        for section in sections:
+            options.append(section['name'] + ": " + section['description'])
         terminal_menu = TerminalMenu(
-            [f"{d['name']}: {d['description']}"  for d in sections],
+            options,
             title = 'Select the section to create networks in'
             )
         menu_entry_index = terminal_menu.show()
-        return sections[menu_entry_index]['id']
-    else:
-        return sections[0]['id']
+        if menu_entry_index == 0:
+            return create_ipam_section()
+        else:
+            return sections[menu_entry_index]['id']
     
 def create_ipam_section():
     # Create a section in phpipam to store subnets in

@@ -1,4 +1,4 @@
 {
-	"phpipam_token": "cZ9tzN3DAafNnK21-CeNcp_wufQOPgNE",
-	"phpipam_base": "https://localhost/api/nac/"
+	"phpipam_token": "<token>",
+	"phpipam_base": "https://localhost/api/<appid>/"
 }

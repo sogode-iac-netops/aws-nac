@@ -7,7 +7,7 @@ terraform {
   }
 }
 
-# Default provider configuration
+# Default AWS provider configuration
 provider "aws" {
     region = "us-east-2"
     alias = "ue2"
@@ -18,7 +18,7 @@ provider "aws" {
     }
 }
 
-# Provider aliases to specify regions
+# AWS Provider aliases to specify regions
 provider "aws" {
     region = "eu-west-1"
     alias = "ew1"

@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.8.0"
+#  required_version = ">= 1.8.0"
 
 #   # Use remote backend for HCP Terraform (formerly Terraform Cloud)
 #   backend "remote" {

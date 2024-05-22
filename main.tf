@@ -7,6 +7,11 @@
 # - Contiguous routing between regions
 
 #
+# Please note that you will be charged for the Transit Gateway attachments.
+# Not much, but still. So do destroy the infrastructure after playing with it.
+# 
+
+#
 # Stage 1
 # - Regional hub VPCs
 # - Regional Transit Gateways

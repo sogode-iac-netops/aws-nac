@@ -3,13 +3,15 @@ AWS Network as Code
 
 This repository is for creating an AWS network fully from code with a view of having it managed by NetOps, DevOps and SecOps people all together.  
 
+Please note that some costs will be incurred for the TGW Attachments. It's not very much but I would recommend to destroy the environment immediately after running the lab.  
+
 Included so far:
 - 2 Regional Transit Gateways
 - 2 Regional Base VPCs for shared services and Internet access
 - 1 Spoke VPC for an application
 
 # NetOps - how?
-After stages 1 & 2 (explanation below) are deployed, DevOps people can fork the repository and create pull requests to deploy their spoke VPCs.
+After stages 1 & 2 (explanation below) are deployed, DevOps people can fork the repository and create pull requests to deploy their spoke VPCs (Stage 3).
 
 When used on Terraform Cloud, a Github workflow can be created where new commits (after reviewing pull requests) automatically trigger deployment.
 

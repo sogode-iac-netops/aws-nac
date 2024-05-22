@@ -38,6 +38,7 @@ The deployment must be done in 3 stages due to technical constraints.
 Each of the stages is clearly marked in both `main.tf` and `outputs.tf`; simply uncomment the next stage after each init, plan, apply sequence.
 
 ## Quick start
+Ensure your AWS default region is set to us-east-2. This is required for the TGW peering request.
 ```
 terraform init
 terraform plan
@@ -55,9 +56,11 @@ The below tools are good to have for more advanced play
 - [My phpipam-docker](https://github.com/peetvandesande/phpipam-docker)
 
 ## Further explanation
-Everything stars with the AWS CLI being installed and configured.  
+Everything starts with the AWS CLI being installed and configured.  
 
-Including credentials and default region.  
+Including credentials and default region, which must be us-east-1 for this example.  
+
+AWS Transit Gateway Peering Requests in Terraform must originate from the default region. My example uses us-east-1 so for now, this needs to be the default region.  
 
 In Terraform, AWS regions are mentioned specifically using provider aliases.
 
@@ -78,7 +81,7 @@ python ipam-hub.py
 python ipam-spoke.py
 ```
 
-In order to progress through the Terraform stages, find the respective headings for each one (conveniently marked 'Stage 2' and 'Stage 3') and from there on down to the end remove '# ' at the begin of each line.
+In order to progress through the Terraform stages, find the respective headings for each one (conveniently marked 'Stage 2' and 'Stage 3') and uncomment the respective blocks, then run terraform init, plan and apply again.  
 
 
 # Feedback

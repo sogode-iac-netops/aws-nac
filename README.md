@@ -47,10 +47,10 @@ terraform apply -auto-approve
 ## Pre-requisites
 This deployment is meant to run on a Linux CLI environment with the following software installed and configured:
 - [Terraform](https://developer.hashicorp.com/terraform/install)
+- [AWS CLI v2](https://github.com/aws/aws-cli/tree/v2)
 
 ## Good to have
 The below tools are good to have for more advanced play
-- [AWS CLI v2](https://github.com/aws/aws-cli/tree/v2)
 - [Python 3](https://www.python.org/downloads/)
 - [My phpipam-docker](https://github.com/peetvandesande/phpipam-docker)
 

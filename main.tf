@@ -132,7 +132,7 @@ module "ue2_tgw" {
 
 #
 # Create TGW peering attachment REQUESTS
-#   Bear in mind these need to be manually approved in web console :/
+#   Bear in mind these need to be manually approved in web console
 resource "aws_ec2_transit_gateway_peering_attachment" "tpa_ue2_x_ew1" {
   # Peer region has to manually accept
   # Use naming convention to indicate initiator and requestor
@@ -148,78 +148,85 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tpa_ue2_x_ew1" {
   depends_on = [module.ew1_tgw, module.ue2_tgw]
 }
 
-# #
-# # Stage 2
-# # - Transit Gateway backbone routing
-# 
-# #
-# # Routing between TGW's depends on peering attachments being in place, but...
-# # PEERING ATTACHMENTS MUST BE MANUALLY APPROVED IN WEB CONSOLE
-# # So only add these TGW routes after having the peering approved.
-# module "ew1_bb" {
-#   source = "./modules/transit_gateway_backbone"
-#   providers = {
-#     aws = aws.ew1
-#   }
-# 
-#   destinations = {
-#     ue2 = {
-#       dst_cidr_block = local.ipam_ue2_hub.region_cidr
-#       attachment_id  = aws_ec2_transit_gateway_peering_attachment.tpa_ue2_x_ew1.id
-#       route_table_id = module.ew1_tgw.tgw_association_default_route_table_id
-#     }
-#   }
-# 
-#   depends_on = [aws_ec2_transit_gateway_peering_attachment.tpa_ue2_x_ew1]
-# }
-# 
-# module "ue2_bb" {
-#   source = "./modules/transit_gateway_backbone"
-#   providers = {
-#     aws = aws.ue2
-#   }
-# 
-#   destinations = {
-#     ew1 = {
-#       dst_cidr_block = local.ipam_ew1_hub.region_cidr
-#       attachment_id  = aws_ec2_transit_gateway_peering_attachment.tpa_ue2_x_ew1.id
-#       route_table_id = module.ue2_tgw.tgw_association_default_route_table_id
-#     }
-#   }
-# 
-#   depends_on = [aws_ec2_transit_gateway_peering_attachment.tpa_ue2_x_ew1]
-# }
-# 
-# # #
-# # # Stage 3
-# # # - Adding spoke VPCs
-# # 
-# # locals {
-# #   # Read ipam output file to create networks
-# #   ipam_ew1_spoke_foov1 = jsondecode((file("${path.cwd}/ipam_spoke_eu-west-1-foo_v1.json")))
-# # }
-# # 
-# # module "ew1_spoke_foov1" {
-# #   source = "./modules/spoke"
-# # 
-# #   providers = {
-# #     aws = aws.ew1
-# #   }
-# # 
-# #   cidr_block = local.ipam_ew1_spoke_foov1.vpc_cidr
-# #   vpc_name   = local.ipam_ew1_spoke_foov1.vpc_description
-# #   subnets = {
-# #     for idx, subnet in local.ipam_ew1_spoke_foov1.subnets :
-# #     "subnet${idx + 1}" => {
-# #       cidr              = subnet.cidr
-# #       description       = subnet.description
-# #       availability_zone = subnet.availability_zone
-# #       ipam_id           = subnet.ipam_id
-# #       scope             = subnet.scope
-# #     }
-# #   }
-# #   tgw_id    = module.ew1_tgw.tgw_id
-# #   tgw_rt_id = module.ew1_tgw.tgw_association_default_route_table_id
-# #   app_name  = local.ipam_ew1_spoke_foov1.application_name
-# # }
-# # 
+/*
+#
+# Stage 2
+# - Transit Gateway backbone routing
+
+#
+# Routing between TGW's depends on peering attachments being in place, but...
+# PEERING ATTACHMENTS MUST BE MANUALLY APPROVED IN WEB CONSOLE
+# So only add these TGW routes after having the peering approved.
+#
+# Also, run `terraform init` again to install the new modules
+module "ew1_bb" {
+  source = "./modules/transit_gateway_backbone"
+  providers = {
+    aws = aws.ew1
+  }
+
+  destinations = {
+    ue2 = {
+      dst_cidr_block = local.ipam_ue2_hub.region_cidr
+      attachment_id  = aws_ec2_transit_gateway_peering_attachment.tpa_ue2_x_ew1.id
+      route_table_id = module.ew1_tgw.tgw_association_default_route_table_id
+    }
+  }
+
+  depends_on = [aws_ec2_transit_gateway_peering_attachment.tpa_ue2_x_ew1]
+}
+
+module "ue2_bb" {
+  source = "./modules/transit_gateway_backbone"
+  providers = {
+    aws = aws.ue2
+  }
+
+  destinations = {
+    ew1 = {
+      dst_cidr_block = local.ipam_ew1_hub.region_cidr
+      attachment_id  = aws_ec2_transit_gateway_peering_attachment.tpa_ue2_x_ew1.id
+      route_table_id = module.ue2_tgw.tgw_association_default_route_table_id
+    }
+  }
+
+  depends_on = [aws_ec2_transit_gateway_peering_attachment.tpa_ue2_x_ew1]
+}
+*/
+
+/*
+#
+# Stage 3
+# - Adding spoke VPCs
+#
+# Also, run `terraform init` again to install the new modules
+
+locals {
+  # Read ipam output file to create networks
+  ipam_ew1_spoke_foov1 = jsondecode((file("${path.cwd}/ipam_spoke_eu-west-1-foo_v1.json")))
+}
+
+module "ew1_spoke_foov1" {
+  source = "./modules/spoke"
+
+  providers = {
+    aws = aws.ew1
+  }
+
+  cidr_block = local.ipam_ew1_spoke_foov1.vpc_cidr
+  vpc_name   = local.ipam_ew1_spoke_foov1.vpc_description
+  subnets = {
+    for idx, subnet in local.ipam_ew1_spoke_foov1.subnets :
+    "subnet${idx + 1}" => {
+      cidr              = subnet.cidr
+      description       = subnet.description
+      availability_zone = subnet.availability_zone
+      ipam_id           = subnet.ipam_id
+      scope             = subnet.scope
+    }
+  }
+  tgw_id    = module.ew1_tgw.tgw_id
+  tgw_rt_id = module.ew1_tgw.tgw_association_default_route_table_id
+  app_name  = local.ipam_ew1_spoke_foov1.application_name
+}
+*/

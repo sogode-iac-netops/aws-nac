@@ -28,13 +28,3 @@ provider "aws" {
         }
     }
 }
-
-provider "aws" {
-    region = "us-east-2"
-    alias = "ue2"
-    default_tags {
-        tags = {
-            Creator = "AWS Network as Code by Peet van de Sande"
-        }
-    }
-}

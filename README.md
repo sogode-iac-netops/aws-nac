@@ -11,7 +11,7 @@ Included so far:
 - 1 Spoke VPC for an application
 
 # NetOps - how?
-After stages 1 & 2 (explanation below) are deployed, DevOps people can fork the repository and create pull requests to deploy their spoke VPCs (Stage 3).
+After stages 1 & 2 (explanation below) are deployed using Terraform or OpenTofu, DevOps people can fork the repository and create pull requests to deploy their spoke VPCs (Stage 3).
 
 When used on Terraform Cloud, a Github workflow can be created where new commits (after reviewing pull requests) automatically trigger deployment.
 
@@ -50,6 +50,8 @@ terraform apply -auto-approve
 ## Pre-requisites
 This deployment is meant to run on a Linux CLI environment with the following software installed and configured:
 - [Terraform](https://developer.hashicorp.com/terraform/install)
+OR...
+- [OpenTofu](https://opentofu.org/docs/intro/install/)
 - [AWS CLI v2](https://github.com/aws/aws-cli/tree/v2)
 
 ## Good to have

@@ -163,31 +163,31 @@ output "ue2_r_ipv4_default_id" {
   value = module.ue2_tgw.r_ipv4_default_id
 }
 
-# #
-# # Stage 2
-# 
-# #
-# # bb_ew1 outputs
-# output "ew1_bb_routes" {
-#   value = {
-#     for idx, route in module.ew1_bb.routes : idx => {
-#       id                     = route.id
-#       destination_cidr_block = route.destination_cidr_block
-#     }
-#   }
-# }
-# 
-# #
-# # bb_ue2 outputs
-# output "ue2_bb_routes" {
-#   value = {
-#     for idx, route in module.ue2_bb.routes : idx => {
-#       id                     = route.id
-#       destination_cidr_block = route.destination_cidr_block
-#     }
-#   }
-# }
-# 
+#
+# Stage 2
+
+#
+# bb_ew1 outputs
+output "ew1_bb_routes" {
+  value = {
+    for idx, route in module.ew1_bb.routes : idx => {
+      id                     = route.id
+      destination_cidr_block = route.destination_cidr_block
+    }
+  }
+}
+
+#
+# bb_ue2 outputs
+output "ue2_bb_routes" {
+  value = {
+    for idx, route in module.ue2_bb.routes : idx => {
+      id                     = route.id
+      destination_cidr_block = route.destination_cidr_block
+    }
+  }
+}
+
 # # #
 # # # Stage 3
 # # 

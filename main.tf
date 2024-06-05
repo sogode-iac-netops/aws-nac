@@ -153,7 +153,6 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tpa_ue2_x_ew1" {
   depends_on = [module.ew1_tgw, module.ue2_tgw]
 }
 
-/*
 #
 # Stage 2
 # - Transit Gateway backbone routing
@@ -197,7 +196,6 @@ module "ue2_bb" {
 
   depends_on = [aws_ec2_transit_gateway_peering_attachment.tpa_ue2_x_ew1]
 }
-*/
 
 /*
 #

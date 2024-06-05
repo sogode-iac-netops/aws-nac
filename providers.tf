@@ -10,6 +10,16 @@ terraform {
 # Default AWS provider configuration
 provider "aws" {
     region = "us-east-2"
+    default_tags {
+        tags = {
+            Creator = "AWS Network as Code by Peet van de Sande"
+        }
+    }
+}
+
+# Alias for default AWS provider configuration
+provider "aws" {
+    region = "us-east-2"
     alias = "ue2"
     default_tags {
         tags = {
@@ -18,7 +28,7 @@ provider "aws" {
     }
 }
 
-# AWS Provider aliases to specify regions
+# Further AWS Provider aliases to specify regions
 provider "aws" {
     region = "eu-west-1"
     alias = "ew1"

@@ -197,6 +197,7 @@ module "ue2_bb" {
   depends_on = [aws_ec2_transit_gateway_peering_attachment.tpa_ue2_x_ew1]
 }
 
+/*
 #
 # Stage 3
 # - Adding spoke VPCs
@@ -231,3 +232,4 @@ module "ew1_spoke_foov1" {
   tgw_rt_id = module.ew1_tgw.tgw_association_default_route_table_id
   app_name  = local.ipam_ew1_spoke_foov1.application_name
 }
+*/

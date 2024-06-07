@@ -188,6 +188,7 @@ output "ue2_bb_routes" {
   }
 }
 
+/*
 #
 # Stage 3
 
@@ -239,3 +240,4 @@ output "ew1_spoke_foov1_subnets" {
 #   value = module.ew1_spoke_foov1.r_id
 # }
 # 
+*/
